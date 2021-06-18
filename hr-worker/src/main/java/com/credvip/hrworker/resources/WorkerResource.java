@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -15,27 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.credvip.hrworker.entities.Worker;
 import com.credvip.hrworker.repositories.WorkerRepository;
+
 @RefreshScope
 @RestController
 @RequestMapping(value = "/workers")
 public class WorkerResource {
-	
+
 	private static Logger logger = org.slf4j.LoggerFactory.getLogger(WorkerResource.class);
-	
+
 	@Autowired
-	private Environment env;	
-	
+	private Environment env;
+
 	// Injeção de dependencia
 	@Autowired
 	private WorkerRepository repository; // ligação com a interface do bd
-	
-	
-	@Value("${test.config}")
-	private String testConfig;
-	
-	@GetMapping(value="/configs")
+
+	@GetMapping(value = "/configs")
 	public ResponseEntity<Void> getConfigs() {
-		logger.info("CONFIG = "+testConfig);
+		// logger.info("CONFIG = "+testConfig);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -45,12 +41,12 @@ public class WorkerResource {
 		return ResponseEntity.ok(list);
 
 	}
-	
-	@GetMapping(value="/{id}")
+
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<Worker> findById(@PathVariable Long id) {
-		
+
 		logger.info("PORT = " + env.getProperty("local.server.port"));
-		Worker obj= repository.findById(id).get();
+		Worker obj = repository.findById(id).get();
 		return ResponseEntity.ok(obj);
 
 	}
